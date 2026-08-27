@@ -1,0 +1,56 @@
+---
+- hosts: master-node
+  become: true
+
+  tasks:
+  - name: Install nginx
+    apt:
+      name: nginx
+      state: present
+
+  - name: Start and enable nginx
+    service:
+      name: nginx
+      state: started
+      enabled: true
+
+  - name: Create project directory
+    file:
+      path: /usr/share/nginx/html/site1
+      state: directory
+
+  - name: Copy files
+    synchronize:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      recursive: "{{ item.recursive }}"
+    loop:
+    - src: /home/saksham/class/Apollo-master/
+      dest: /usr/share/nginx/html
+      recursive: yes
+
+    - src: /home/saksham/class/site1
+      dest: /etc/nginx/sites-available
+      recursive: yes
+    notify:
+    - Restart nginx
+    tags:
+    - copy
+
+  - name: Link config file
+    file:
+      src: /etc/nginx/sites-available/site1
+      dest: /etc/nginx/sites-enabled/site1
+      state: link
+    notify:
+    - Restart nginx
+    tags:
+    - link
+
+  handlers:
+  - name: Restart nginx
+    service:
+      name: nginx
+      state: restarted
+    tags:
+    - restart

@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become_user: root
+  vars:
+  - local: /home/saksham/ansible
+  - remote: /devops-dir
+  - perm: 750
+
+  tasks:
+  - name: Copy files
+    copy:
+      src: "{{ local }}"
+      dest: "{{ remote }}"
+      mode: "{{ perm }}"
+      owner: saksham
+      group: saksham
+
+  - name: Archive file
+    archive:
+      path: "{{ remote }}"
+      dest: "{{ remote }}/ansible.tar"
+

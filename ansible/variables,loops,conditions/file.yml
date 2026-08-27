@@ -1,0 +1,22 @@
+---
+- hosts: test
+  become: true
+  become_user: root
+  vars:
+  - local: /home/saksham/class
+  - remote: /backup
+  - perm: 750
+
+  tasks:
+  - name: Create directory
+    file:
+      path: "{{ remote }}"
+      state: directory
+      owner: saksham
+      group: cloud
+      mode: "{{ perm }}"
+
+  - name: Copy files
+    copy:
+      src: "{{ local }}"
+      dest: "{{ remote }}"

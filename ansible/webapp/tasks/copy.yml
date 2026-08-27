@@ -1,0 +1,16 @@
+---
+- name: Copy files
+  synchronize:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    recursive: "{{ item.recursive }}"
+  loop:
+  - src: Apollo-master/
+    dest: /var/www/site1/
+    recursive: yes
+
+  - src: site1
+    dest: /etc/nginx/sites-available
+    recursive: yes
+  notify:
+  - restart nginx

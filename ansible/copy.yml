@@ -1,0 +1,15 @@
+---
+- hosts: dev
+  become_user: root
+
+  tasks:
+  - name: Copy files
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+      mode: "{{ item.mode }}"
+
+    loop:
+    - { src: "/home/saksham/class", dest: "/home", owner: "saksham", group: "class", mode: "770" }

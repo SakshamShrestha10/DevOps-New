@@ -1,0 +1,32 @@
+---
+- hosts: dev
+
+  tasks:
+  - name: Install mysql
+    apt:
+      name: 
+      - mysql-server
+      - python3-pymysql
+      state: present
+
+  - name: Start and enable mysql
+    service:
+      name: mysql
+      state: started
+      enabled: yes
+
+  - name: Set root password
+    mysql_user:
+      name: root
+      host: localhost
+      password: admin12345
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      check_implicit_admin: yes
+      state: present
+
+  - name: Create database
+    mysql_db:
+      name: broadway
+      state: present
+      login_user: root
+      login_password: admin12345

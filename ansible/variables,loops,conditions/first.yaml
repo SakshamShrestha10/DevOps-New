@@ -1,0 +1,19 @@
+---
+- hosts: test
+  become: true
+
+  vars:
+  - gname: cloud
+  - uname: nischal
+
+  tasks:
+  - name: Create group
+    group:
+      name: "{{ gname }}"
+      state: present
+
+  - name: Create user
+    user:
+      name: "{{ uname }}"
+      state: present
+      groups: "{{ gname }}"

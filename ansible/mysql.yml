@@ -1,0 +1,44 @@
+---
+- name: Install and configure MySQL
+  hosts: master-node
+  become: yes
+  
+  tasks:
+    - name: Install MySQL server
+      apt:
+        name: 
+        - mysql-server
+        - python3-pymysql
+        state: present
+        update_cache: yes
+
+    - name: Ensure MySQL is started and enabled
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Set root password and apply secure installation
+      mysql_user:
+        name: root
+        host: localhost
+        password: admin12345
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        check_implicit_admin: yes
+        state: present
+
+    - name: Create database
+      mysql_db:
+        name: app
+        state: present
+        login_user: root
+        login_password: admin12345
+
+    - mysql_user:
+        name: appuser
+        password: App@pass123#
+        host: "%"
+        priv: "app.*:ALL"
+        state: present
+        login_user: root
+        login_password: admin12345

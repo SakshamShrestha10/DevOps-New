@@ -1,0 +1,19 @@
+---
+- hosts: servers
+  become_user: root
+
+  tasks:
+  - name: Add new content
+    lineinfile:
+      path: /etc/hosts
+      line: '192.168.1.117  site4.com'
+      insertafter: '192.168.1.110'
+
+
+  - name: Replace content
+    replace:
+      path: /etc/hosts
+      regexp: '192.168.1.116'
+      replace: '192.168.1.20'
+    tags:
+    - change

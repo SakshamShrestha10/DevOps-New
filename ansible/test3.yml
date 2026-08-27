@@ -1,0 +1,52 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+
+  vars:
+  - rhel8: nginx,git,chrony
+  - cent7: chrony
+  - deb: nginx
+  - status: present
+  - stat: absent
+
+  tasks:
+  - name: Copy files
+    copy:
+      src: mount-rhel8.sh
+      dest: /home/saksham
+      mode: '777'
+    when: ansible_fqdn == "redhat8.example.com"
+
+  - name: Run scripts on rhel8
+    command: sh /home/saksham/mount-rhel8.sh
+    when: ansible_fqdn == "redhat8.example.com"
+
+  - name: Install packages
+    dnf:
+      name: "{{ rhel8 }}"
+      state: present
+    when: ansible_fqdn == "redhat8.example.com"
+
+  - name: Copy file on centos
+    copy:
+      src: mount.sh
+      dest: /home/saksham
+      mode: '777'
+    when: ansible_fqdn == "host2.example.com"
+
+  - name: Run script on centos
+    command: sh /home/saksham/mount.sh
+    when: ansible_fqdn == "host2.example.com"
+
+  - name: Install on centos
+    yum:
+      name: "{{ cent7 }}"
+      state: present
+    when: ansible_fqdn == "host2.example.com"
+
+  - name: Install on ubuntu
+    apt:
+      name: "{{ deb }}"
+      state: present
+    when: ansible_fqdn == "ubuntu.example.com"

@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become_user: root
+
+  tasks:
+  - name: Install
+    apt:
+      name: "{{ item }}"
+      state: present
+    when: ansible_nodename == "master-node"
+    loop:
+    - openjdk-17-jdk
+    - maven
+    tags:
+    - ubuntu
+
+  - name: Install on rhel
+    yum:
+      name: "{{ item }}"
+      state: present
+    when: ansible_nodename == "ansible-node"
+    loop:
+    - chrony
+    - nfs-utils
+

@@ -1,0 +1,32 @@
+---
+- hosts: all
+  become_user: root
+
+  tasks:
+  - name: Create group
+    group:
+      name: "{{ item.name }}"
+      state: "{{ item.state }}"
+
+    loop:
+    - name: linux
+      state: present
+
+    - name: class
+      state: present
+
+  - name: Create users
+    user:
+      name: "{{ item.name }}"
+      state: "{{ item.state }}"
+      groups: "{{ item.groups }}"
+      append: yes
+
+    loop:
+    - name: Dan
+      state: present
+      groups: class
+
+    - name: Sara
+      state: present
+      groups: linux

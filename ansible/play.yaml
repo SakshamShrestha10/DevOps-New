@@ -1,0 +1,20 @@
+---
+- hosts: servers
+  become_user: root
+
+  tasks:
+  - name: Create directory
+    file:
+      path: /devops-dir
+      state: directory
+      owner: saksham
+      group: devops
+      mode: '770'
+
+  - name: Create file
+    file:
+      path: /devops-dir/devops.txt
+      state: touch
+      owner: saksham
+      group: devops
+      mode: '750'

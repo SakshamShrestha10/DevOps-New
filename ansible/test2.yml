@@ -1,0 +1,19 @@
+---
+- hosts: master-node
+  ignore_errors: yes
+
+  tasks:
+  - name: Create a directory
+    file:
+      path: /home/ansible
+      state: directory
+      owner: saksham
+      group: broadway
+      mode: '750'
+    tags:
+    - test
+
+  - name: Copy files
+    copy:
+      src: /home/saksham/class/ansible.cfg
+      dest: /home/saksham

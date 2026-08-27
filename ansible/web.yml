@@ -1,0 +1,38 @@
+---
+<<<<<<< HEAD
+- hosts: dev
+
+  tasks:
+
+  - name: Install nginx
+    apt:
+      name: nginx
+      state: latest
+
+  - name: Start and enable nginx
+    service:
+      name: nginx
+      state: started
+      enabled: true
+
+  - name: Copy project files
+    copy:
+      src: /home/saksham/Apollo-master/
+      dest: /usr/share/nginx/html
+
+  - name: Copy nginx conf file
+    copy:
+      src: ./nginx.conf
+      dest: /etc/nginx/conf.d
+
+  - name: Restart nginx
+    service:
+      name: nginx
+      state: restarted
+=======
+- hosts: master-node
+  
+  roles:
+  - nginx
+
+>>>>>>> c102f7f (first commit)

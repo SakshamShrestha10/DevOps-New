@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become_user: root
+
+  tasks:
+  - name: Copy files
+    copy:
+      src: /home/saksham/ansible
+      dest: /home
+    when: ansible_distribution == "RedHat"
+
+  - name: Copy
+    copy:
+      src: /home/saksham/class
+      dest: /home/saksham
+    when: ansible_os_family == "Debian"

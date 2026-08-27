@@ -1,0 +1,8 @@
+---
+- hosts: master-node
+
+  tasks:
+  - name: Download files
+    get_url:
+      url: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
+      dest: /home

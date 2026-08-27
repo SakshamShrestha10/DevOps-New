@@ -1,0 +1,49 @@
+---
+<<<<<<< HEAD
+- hosts: dev
+  become: true
+
+  tasks:
+  - name: Remove softwares on redhat
+    yum:
+      name: "{{ item }}"
+      state: absent
+    loop:
+    - nginx
+    - git
+    when: inventory_hostname in groups['test']
+
+  - name: Install on ubuntu
+    apt:
+      name: "{{ item }}"
+      state: latest
+    loop:
+    - nginx
+    - git
+    - docker
+    when: inventory_hostname in groups['dev']
+
+
+=======
+- hosts: all
+
+  tasks:
+  - name: Install
+    apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+    - nginx
+    - maven
+    when: inventory_hostname in groups ['servers']
+
+  - name: Install on rhel
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+    - nginx
+    - chrony
+    - git
+    when: inventory_hostname in groups ['test']
+>>>>>>> c102f7f (first commit)

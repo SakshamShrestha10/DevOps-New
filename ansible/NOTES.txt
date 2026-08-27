@@ -1,0 +1,30 @@
+- Create user on ansible master and worker nodes
+- User on all machines should be same with same password for all. For eg: if ansible is the username, this user should be present in all machines with same password
+- Copy the ssh-key file i.e. id_rsa.pub file from master machine to worker machines and paste it on the file named authorized_keys. 
+- Test connection. ssh <username>@<hostname or IP>
+- Install and check ansible on master machine. 
+	sudo apt install -y ansible
+	sudo dpkg -l ansible
+
+- On master machine, change the directory and create a file with name hosts:
+	cd /etc/ansible
+	sudo vim hosts
+
+- Inside the hosts file, add worker machine's IP or hostname. For eg:
+
+[servers]
+worker-node1
+worker-node2
+
+[dev]
+worker-dev
+
+[prod]
+worker-prod 
+
+The content inside [] is called group and rest are hostname of worker nodes.
+The worker-node 1 and are inside the group named servers. For other the process is same.
+
+#Check if ansible master and ping the worker nodes#
+ansible -m ping all (m=module and all=every machines that master node controls)
+

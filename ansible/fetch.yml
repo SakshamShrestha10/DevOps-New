@@ -1,0 +1,11 @@
+---
+- hosts: dev
+  become: true
+
+  tasks:
+  - name: fetch files from remote
+    fetch:
+      src: /home/saksham/ansible.tar
+      dest: /home/saksham/class/
+      flat: yes
+

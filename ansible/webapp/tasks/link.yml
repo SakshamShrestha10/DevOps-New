@@ -1,0 +1,8 @@
+---
+- name: Link files
+  file:
+    src: /etc/nginx/sites-available/site1
+    dest: /etc/nginx/sites-enabled/site1
+    state: link
+  notify:
+  - restart nginx

@@ -1,0 +1,27 @@
+---
+- hosts: 192.168.1.82
+  become: true
+
+  tasks:
+  - name: Install packages
+    apt:
+      name:
+      - nodejs
+      - npm
+      - nginx
+      state: latest
+
+  - name: Copy project files
+    copy:
+      src: /home/saksham/e-commerce-site
+      dest: /home/saksham
+
+  - name: Install dependencies
+    command: npm install
+    args:
+      chdir: /home/saksham/e-commerce-site
+
+  - name: Build react app
+    command: npm run build
+    args:
+      chdir: /home/saksham/e-commerce-site

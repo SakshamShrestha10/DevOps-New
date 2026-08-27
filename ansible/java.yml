@@ -1,0 +1,20 @@
+---
+- hosts: 192.168.1.82
+  become: true
+
+  tasks:
+  - name: Install packages
+    apt:
+      name:
+      - maven
+      - openjdk-17-jdk
+
+  - name: Copy project files
+    copy:
+      src: /home/saksham/bankapp
+      dest: /home/saksham
+
+  - name: Build project
+    command: mvn clean package -DSkipTests
+    args:
+      chdir: /home/saksham/bankapp
