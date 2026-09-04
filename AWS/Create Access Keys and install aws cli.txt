@@ -1,0 +1,31 @@
+
+- Go to IAM > Users > Select user
+- Select Security Credentials
+- Scroll down and on Access keys field, click on create access key
+- Select Command Line Interface (CLI)
+- Check the confirmation box and click next > Create access key
+
+Important Note: Don’t loose these keys. Download .csv file to your local machine
+
+
+##Install AWS CLI on your deployment Server
+- Login to the instance
+sudo apt-get update
+sudo apt-get install unzip curl -y	
+
+##Download AWS CLI
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+##Unzip
+unzip awscliv2.zip
+
+##Run installation script
+sudo ./aws/install
+
+##Check version
+aws --version
+
+##Configure your instance with aws access and secret key##
+- In the instance, type command:
+aws configure
+(After you hit enter, provide your aws access and secret key you generated earlier)

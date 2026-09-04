@@ -1,0 +1,24 @@
+STEP1
+- Create ec2 instance for deployment
+- Install docker docker-compose in the server
+- Add user ubuntu in group named docker
+- install AWS CLI (if not installed) ## https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html ##
+- configure aws cli > add access key, secret key and region
+
+STEP2 
+- Create Codebuild
+- Create ECR
+- Attach policies for codebuild so that it can manage ecr as well for codebuild to manage SSH
+- Go to IAM > Roles > Click on your codebuild service role > Add Permissions > Attach Policies  ##Attach the following policies  
+1. AmazonEC2ContainerRegistryFullAccess
+2. AmazonSSMReadOnlyAccess
+
+
+##Store credentials in Paramter Store
+
+1. Go to AWS Systems Manager Console
+2. In left panel, click Parameter Store > Create parameter
+3. Give name for paramaeter (eg: /codebuild/ssh) and Description is optional
+4. On Tier section, choose standard
+5. On Type, select SecureString
+6. On Value, enter your secret (for eg: your ssh private key)
