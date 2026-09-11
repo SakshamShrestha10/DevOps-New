@@ -1,0 +1,64 @@
+##FOR EC2##
+ec2-codedeploy-role ##name of role(give any name)##
+- AmazonEC2ContainerRegistryReadOnly
+- AmazonEC2RoleforAWSCodeDeploy
+- AWSCodeDeployRole
+- AmazonS3ReadOnlyAccess
+
+
+##FOR CodeDeploy##
+codedeployrole ##name of role(give any name)##
+- AmazonS3ReadOnlyAccess
+- AWSCodeDeployRole
+
+
+##FOR codebuild##
+codebuildservicerole ##name of role(give any name)##
+- AmazonEC2ContainerRegistryFullAccess
+- AmazonEC2ReadOnlyAccess
+- AmazonSSMReadOnlyAccess
+
+
+##appspec.yml##
+version: 0.0
+os: linux
+
+hooks:
+  AfterInstall:
+    - location: scripts/deploy.sh
+      timeout: 300
+      runas: root
+
+
+##buildspec.yml##
+artifacts:
+  files:
+    - '**/*'
+
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Action": [
+				"codebuild:BatchGetBuilds",
+				"codebuild:StartBuild",
+				"codebuild:BatchGetBuildBatches",
+				"codebuild:StartBuildBatch"
+			],
+			"Resource": [
+				"arn:aws:codebuild:*:573967297194:project/devops-webapp"
+			],
+			"Effect": "Allow"
+		},
+		{
+			"Effect": "Allow",
+			"Action": "iam:PassRole",
+			"Resource": "arn:aws:iam::573967297194:role/service-role/codebuild-test",
+			"Condition": {
+				"StringEquals": {
+					"iam:PassedToService": "codebuild.amazonaws.com"
+				}
+			}
+		}
+	]
+}

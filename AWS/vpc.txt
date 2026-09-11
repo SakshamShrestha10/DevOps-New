@@ -1,0 +1,76 @@
+A VPC (Virtual Private Cloud) is a logically isolated network within a cloud provider's infrastructure (like AWS, GCP, or Azure). It allows you to launch and manage cloud resources (like EC2 instances, databases, or containers) in a secure, customizable virtual network.
+
+Think of it as your own private data center in the cloud, where you control networking aspects like IP addressing, subnets, routing, and security.
+
+
+CIDR Block (Classless Inter-Domain Routing)
+Defines the IP address range of the VPC.
+Example: 10.0.0.0/16
+10.0.0.0: Starting IP address
+/16: Subnet mask (gives you ~65,536 IP addresses)
+
+Subnets
+Subdivisions of the VPC's CIDR block.
+Two types:
+Public Subnet: Accessible from the internet (via an Internet Gateway).
+Private Subnet: Not directly accessible from the internet.
+
+public subnet - if Internet Gateway is attached
+private subnet - if Internet Gateways is not attached
+NAT GATEWAY - to access private from public
+IGW > ROUTETABLE > PUBLIC SUBNET
+
+Internet Gateway (IGW)
+A gateway that connects your VPC to the internet.
+Required for internet access from instances in public subnets.
+
+Control the traffic routing within the VPC.
+Contains a list of rules (routes) that determine where network traffic is directed.
+
+Click Subnets from left panel
+Click on create vpc and choose vpc from VPC ID
+Give Subnet name. For eg: public subnet
+Choose IPv4 subnet CIDR block. For eg: 10.0.0.0/24
+Click on create subnet
+
+Click Internet Gateway from left panel
+Click on create Internet gateway > Give name for Internet Gateway > Create
+##Attach IGW to VPC##
+
+Click on your created Internet Gateway
+On top right, click on Actions > Attach to VPC
+Choose your VPC from Available VPC'S field > Click Attach Internet Gateway
+
+##Note: To access Internet, Internet Gateway and public subnet must know each other which is possible via route
+
+Click on Route tables from left panel
+Click on Create route table
+Give name for you route table under Name section
+Choose your vpc > Click on create route table
+Go to subnet association in your created route tables
+Click on edit subnet associations > Choose your subnet > Click on save associations 
+Click on Routes in your created route table > Click on Edit routes
+Inside routes, Cick on Add route > Select IP range. For eg: 0.0.0.0/0, On Target section, choose Internet Gateway and select you internet gateway > Save changes
+
+
+#VPC PEERING##
+Click on Peering Connections from left panel
+Click on Create peering connection
+Give Name under Name section
+Choose your VPC	from VPC ID(Requester) section
+Under Select another VPC to peer with section, choose your required option
+Under VPC ID (Accepter), select your vpc
+Click on Create peering connection	
+Click on Peering Connections from left panel and choose your connection name > Click on Actions from top and click on Accept request
+Click on Route tables from left panel and select one of your previously created route table > Go to Routes > Edit routes > Add route > Give your other vpc CIDR in Destination field and on Target, select Peering Connection you created earlier
+Do the same for another vpc as well
+
+Go to EC2 
+Select one of your instance with which your vpc is attached.
+Select Security tab > Choose your security group > Click on Edit Inbound rules > Add rule > On Type Section, choose ALL ICMP - IPv4 and on Source section, give your other VPC CIDR > Save rules
+Similarly, select your other instance with which your other vpc is attached > Choose your security group > Click on Edit Inbound rules > Add rule > On Type Section, choose ALL ICMP - IPv4 and on Source section, give your other VPC CIDR > Save rules
+
+
+Bastion Host / Bastion Server / Jump Host / Jump Server
+A bastion host is a server whose role is to provide access to private network from an external network like internet
+

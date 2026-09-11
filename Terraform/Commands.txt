@@ -1,0 +1,15 @@
+terraform init ##initialize project##
+
+terraform validate #validate terraform configurations##
+
+terraform plan ##dry run configurations##
+
+terraform apply ##make actual changes to your configurations##
+
+terraform apply --auto-approve
+
+terraform destroy ##delete configurations##
+
+terraform state list ##list state file## (state file name is always terraform.tfstate, autocreates when we apply our changes i.e. terraform apply)
+
+terraform refresh ##refresh your terraform configurations##
