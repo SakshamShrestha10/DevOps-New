@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cv-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cv-web-app
+  template:
+    metadata:
+      labels:
+        app: cv-web-app
+    spec:
+      containers: 
+        - name: cv-web-app
+          image: saksham1997/cv-web:dev
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "5m"
+              memory: "10Mi"
+            limits:
+              cpu: "30m"
+              memory: "30Mi"
