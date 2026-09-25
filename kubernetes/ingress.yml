@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+spec:
+  rules:
+    - host: bankapp.devops.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bankapp-service #service name of application; kubectl get svc
+                port:
+                  number: 8080 #service port
+
+
+    - host: devopswebapp.devops.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: devops-webapp #service name of application; kubectl get svc
+                port:
+                  number: 80 #service port
+
