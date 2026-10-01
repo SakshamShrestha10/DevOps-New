@@ -1,0 +1,40 @@
+			##Create IAM ROLES##
+1. Go to IAM
+2. From left panel, click on roles > Create role > Choose AWS Service
+3. Under Use case, select EKS and choose EKS-Cluster > Next > Next > Give role name > Create role
+
+
+			##Create Cluster##
+1. From search bar, search for EKS
+2. Click on Create cluster
+3. Give Cluster Name and select the role you created from the earlier step
+4. Click on Next
+5. On Networking tab, select vpc and select subnets. (3 subnets are enough)
+6. Select and choose your security group
+7. On Cluster endpoint access, select Public and Private > Click on Next > Next
+8. Select add-ons. Leave it as default > Next
+9 Configure selected add-ons settings. Leave it as default > Next > Create cluster
+
+	
+
+			## Create Node Group##
+
+1. First go to IAM > click on roles > Choose AWS Service
+2. Under Use case, select EC2 > Next
+3. On Add permissions, search for AmazonEKSWorkerNodePolicy and AmazonEC2ContainerRegistryReadOnly and AmazonEKS_CNI_Policy policies and click on next
+4. Give role name > Create role
+
+1. Go to Compute
+2. On Node Group, click on Add Node Group > Give name > IN Node IAM role, choose the role you created in above step > Next
+3. On Node group compute configuration, select AMI type, instance types, disk size.
+4. On Node group scaling configuration, choose your Desired size, Minimum size and Maximun size > Click on Next
+5. Choose subnets > Next
+6. Click on create
+
+Add user to Cluster
+1. Select your eks cluster > Access > Create access entry > Add your IAM user > Next
+2. Under Access policies,  select and add AmazonEKSAdminPolicy and AmazonEKSClusterPolicy > Next > Create 
+
+
+
+aws eks update-kubeconfig --name=eks-cluster --region=us-east-1

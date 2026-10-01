@@ -1,0 +1,63 @@
+# Get OpenID Connect provider URL
+- Search for EKS > clusters > Select your cluster > On Overview section, copy the OpenID URL
+
+#Add Identity Provider
+- IAM > Identity providers > Add provider > Choose OpenID Connect > Paste the OpenID url > add audience as sts.amazonaws.com
+
+## POLICY ##
+https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.14.1/docs/install/iam_policy.json
+
+#Create policy for eks-alb#
+- Search for IAM > Select policies > Create policy > Choose JSON > Paste the policy > Create 
+
+#Create role and attach the policy created#
+- IAM > Select Roles > Craete role > Choose AWS service, Use case EC2 > Next > Search the policy created above > Give role name > Create role
+- Click on the created role > Trust relationships > Edit trust policy > Copy the following and just edit the OIDC number
+
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Federated": "arn:aws:iam::573967297194:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/<Paste your OIDC>"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+                "StringEquals": {
+                    "oidc.eks.us-east-1.amazonaws.com/id/<Paste your OIDC>:aud": "sts.amazonaws.com"
+                }
+            }
+        }
+    ]
+}
+
+
+## Login to your machine and create a file with extension .yml (example: sa.yml) and add the following ##
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aws-load-balancer-controller
+  namespace: kube-system
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::<your-account-ID>:role/<give the role name you created in IAM>
+
+kubectl apply -f sa.yml
+
+## Install AWS Load Balancer Controller ##
+
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update eks
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=<your-cluster-name> \
+  --set serviceAccount.create=false \
+  --set region=<your-region> \
+  --set vpcId=<your-vpcId> \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --version 1.14.0
+
+kubectl get deployment -n kube-system aws-load-balancer-controller
+kubectl get pods -n kube-system

@@ -1,0 +1,23 @@
+Step 1: Create the OIDC provider
+- Search EKS > Clusters > your cluster > On Cluster info, copy the OpenID Connect provider URL
+- Go to IAM > Identity providers > Add provider
+- Choose OpenID Connect, paste the URL as Provider URL, and on Audience enter sts.amazonaws.com > Add Provide
+
+Step 2: Create the IAM role
+- Go to IAM > Roles > Create role.
+- Choose Web identity, select your OIDC provider, and set Audience to sts.amazonaws.com > Click Next.
+- Search for the policy AmazonEBSCSIDriverPolicy > Click Next.
+- Name the role AmazonEKS_EBS_CSI_DriverRole and click Create role. (Give any name for role)
+
+Step 3: Install the EBS CSI add-on
+- Go to EKS > Clusters > Click on your cluster > Add-ons > Get more add-ons.
+- Select Amazon EBS CSI Driver and click Next.
+- On Add-on access select IAM roles for service accounts (IRSA)
+- On Select IAM roel, select the role you created above i.e, AmazonEKS_EBS_CSI_DriverRole (your role name) and click on Next > Create
+
+#Login to the server which you are using to connect to the cluster and update kubeconfig
+
+- aws eks update-kubeconfig --name=<your-cluster-name> --region=<your-region>
+
+#To check the status
+- kubectl get pods -n kube-config
